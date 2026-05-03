@@ -5,8 +5,7 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.CLIENT_URL.split(',');
-
+const allowedOrigins = (process.env.CLIENT_URL || '').split(',').filter(Boolean);
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like Postman, curl)

@@ -5,12 +5,20 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
+const allowedOrigins = process.env.CLIENT_URL.split(',');
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://devoted-smile-production-0e6e.up.railway.app'
-  ],
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET','POST','PUT','PATCH','DELETE'],
   allowedHeaders: ['Content-Type','Authorization'],
 }));
 app.use(express.json());

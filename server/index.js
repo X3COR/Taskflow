@@ -6,12 +6,12 @@ const app = express();
 
 // Middleware
 const allowedOrigins = (process.env.CLIENT_URL || '').split(',').filter(Boolean);
+
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like Postman, curl)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
       return callback(new Error('Not allowed by CORS'));
